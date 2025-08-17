@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    // Here you would typically fetch statistics and other data
-    // based on the user's role
+  
   }
 }

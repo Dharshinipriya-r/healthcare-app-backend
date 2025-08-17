@@ -11,10 +11,10 @@ type TokenPayload = {
   firstName?: string;
   lastName?: string;
   id?: number;
-  role?: string;  // 🔧 CHANGE 1: Added this line to support single role string
+  role?: string;  
   roles?: string[];
   authorities?: string[];
-  exp?: number; // seconds since epoch
+  exp?: number; 
 };
 
 @Injectable({

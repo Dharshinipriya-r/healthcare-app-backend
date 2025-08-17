@@ -32,7 +32,7 @@ export const routes: Routes = [
   {
     path: 'doctor-dashboard',
     loadComponent: () => import('./doctor/doctor-dashboard').then(m => m.DoctorDashboardComponent),
-    // canActivate: [AuthGuard, DoctorGuard],
+    
   },
   {
     path: 'profile',
@@ -41,12 +41,12 @@ export const routes: Routes = [
   },
   { path: 'admin', loadComponent: () => import('./admin/admin').then(m => m.AdminComponent), canActivate: [AuthGuard, AdminGuard] },
 
-  // Appointments (patient-only)
+  
   {
     path: 'doctor-search',
     loadComponent: () =>
       import('./appointments/doctor-search').then(m => m.DoctorSearchComponent),
-    // canActivate: [AuthGuard, PatientGuard],
+    
   },
   {
     path: 'book/:doctorId/:date/:startTime',
@@ -58,19 +58,19 @@ export const routes: Routes = [
     path: 'my-appointments',
     loadComponent: () =>
       import('./appointments/my-appointments').then(m => m.MyAppointmentsComponent),
-    // canActivate: [AuthGuard, PatientGuard],
+    
   },
   {
     path: 'doctor/schedule',
     loadComponent: () =>
       import('./doctor/schedule/schedule').then(m => m.DoctorScheduleComponent),
-    // canActivate: [AuthGuard, DoctorGuard],
+    
   },
   {
     path: 'doctor/upcoming',
     loadComponent: () =>
       import('./doctor/upcoming/upcoming').then(m => m.DoctorUpcomingComponent),
-    // canActivate: [AuthGuard, DoctorGuard],
+    
   },
   {
     path: 'doctor/history',

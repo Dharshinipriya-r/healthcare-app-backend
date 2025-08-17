@@ -18,7 +18,7 @@ interface ExtendedUser {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, AverageRatingPipe],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin.html',
   styleUrls: ['./admin.css'],
 })
@@ -55,7 +55,7 @@ export class AdminComponent implements OnInit {
               location: a.doctor.location,
               rating: a.doctor.rating,
               slotDurationInMinutes: a.doctor.slotDurationInMinutes
-              // Do NOT include availabilities here
+              
             };
           }
           return a;

@@ -56,7 +56,9 @@ export class App implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    localStorage.clear();
     this.authService.logout();
     this.router.navigate(['/login']);
+  
   }
 }

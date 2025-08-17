@@ -1,8 +1,8 @@
 export type SlotStatus = 'AVAILABLE' | 'BOOKED';
 
 export interface TimeSlotDto {
-  startTime: string;  // "HH:mm:ss"
-  endTime: string;    // "HH:mm:ss"
+  startTime: string;  
+  endTime: string;    
   status: SlotStatus;
 }
 
@@ -21,7 +21,7 @@ export interface DoctorSearchResult {
 
 export interface AppointmentRequestDto {
   doctorId: number;
-  appointmentDateTime: string; // ISO "YYYY-MM-DDTHH:mm:ss"
+  appointmentDateTime: string; 
 }
 
 export interface AppointmentDetails {
@@ -30,9 +30,9 @@ export interface AppointmentDetails {
   patientName: string;
   doctorId: number;
   doctorName: string;
-  appointmentDateTime: string; // ISO
+  appointmentDateTime: string;
   status: 'SCHEDULED' | 'CANCELLED' | 'COMPLETED' | string;
-  createdAt: string; // ISO
+  createdAt: string; 
 }
 
 export interface AppointmentBookResponse {
@@ -54,7 +54,7 @@ export interface WaitlistJoinResponse {
     waitlistId: number;
     patientId: number;
     patientName: string;
-    preferredDate: string; // "YYYY-MM-DD"
-    requestedAt: string;   // ISO
+    preferredDate: string; 
+    requestedAt: string;   
   };
 }

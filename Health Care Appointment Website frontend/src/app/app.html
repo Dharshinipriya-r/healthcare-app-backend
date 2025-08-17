@@ -11,7 +11,7 @@
         <span>Dashboard</span>
       </a>
       
-      <!-- Patient Navigation -->
+     
       <ng-container *ngIf="!isAdmin && !isDoctor">
         <a routerLink="/doctor-search" routerLinkActive="active">
           <i class="fas fa-user-md"></i>
@@ -23,7 +23,6 @@
         </a>
       </ng-container>
       
-      <!-- Doctor Navigation -->
       <ng-container *ngIf="isDoctor">
         <a routerLink="/doctor/schedule" routerLinkActive="active">
           <i class="fas fa-clock"></i>

@@ -35,31 +35,7 @@
   <div class="dashboard-content">
     <!-- Patient Dashboard -->
     <div *ngIf="user?.role === 'ROLE_PATIENT'" class="patient-dashboard">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-calendar-check"></i>
-          </div>
-          <div class="stat-content">
-            <h3>Upcoming Appointments</h3>
-            <p class="stat-number">{{ stats.totalAppointments || 0 }}</p>
-            <p class="stat-label">This month</p>
-          </div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-user-md"></i>
-          </div>
-          <div class="stat-content">
-            <h3>Available Doctors</h3>
-            <p class="stat-number">{{ stats.availableDoctors || 12 }}</p>
-            <p class="stat-label">Online now</p>
-          </div>
-        </div>
-        
-        
-
+   
      
     </div>
 
