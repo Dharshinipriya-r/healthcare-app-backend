@@ -142,7 +142,6 @@ public class AppointmentService {
             log.error("Failed to send patient cancellation notification for appointment {}. Error: {}", appointmentId, e.getMessage());
         }
 
-        
         processWaitlistForCancellation(appointment);
     }
 
@@ -184,6 +183,7 @@ public class AppointmentService {
         return mapToResponseDto(savedAppointment);
     }
 
+    
     private void processWaitlistForCancellation(Appointment cancelledAppointment) {
         User doctor = cancelledAppointment.getDoctor();
         LocalDate date = cancelledAppointment.getAppointmentDateTime().toLocalDate();
@@ -202,7 +202,7 @@ public class AppointmentService {
                     .patient(patientToBook)
                     .doctor(doctor)
                     .appointmentDateTime(freedSlot)
-                    .status(AppointmentStatus.SCHEDULED) 
+                    .status(AppointmentStatus.SCHEDULED) // Starts as scheduled, doctor needs to confirm
                     .build();
             appointmentRepository.save(newAppointment);
 
