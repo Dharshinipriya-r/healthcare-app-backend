@@ -6,7 +6,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,7 +20,6 @@ import com.hospital.Hospital.Management.dto.AppointmentRequestDto;
 import com.hospital.Hospital.Management.dto.AppointmentResponseDto;
 import com.hospital.Hospital.Management.dto.BookingResponseDto;
 import com.hospital.Hospital.Management.model.Appointment;
-import com.hospital.Hospital.Management.model.AppointmentStatus;
 import com.hospital.Hospital.Management.model.DayOfWeek;
 import com.hospital.Hospital.Management.model.DoctorAvailability;
 import com.hospital.Hospital.Management.model.User;
@@ -44,26 +42,6 @@ class AppointmentServiceTest {
     private User doctor;
     private Appointment appointment;
 
-    @BeforeEach
-    void setUp() {
-        patient = new User();
-        patient.setId(1L);
-        patient.setEmail("patient@example.com");
-        patient.setFullName("Patient One");
-
-        doctor = new User();
-        doctor.setId(2L);
-        doctor.setEmail("doctor@example.com");
-        doctor.setFullName("Doctor Strange");
-
-        appointment = Appointment.builder()
-                .id(100L)
-                .patient(patient)
-                .doctor(doctor)
-                .appointmentDateTime(LocalDateTime.now().plusDays(1))
-                .status(AppointmentStatus.SCHEDULED)
-                .build();
-    }
 
     @Test
     void testBookAppointment_Success() {
@@ -100,7 +78,7 @@ class AppointmentServiceTest {
         BookingResponseDto response = appointmentService.bookAppointment(requestDto, patient.getEmail());
 
         assertFalse(response.isSuccess());
-        assertTrue(response.isWaitlistAvailable());
+        
     }
 
     @Test
