@@ -1,9 +1,9 @@
-// src/main/java/com/hospital/Hospital/Management/doctor_management_module_3/dto/UpcomingAppointmentDto.java
 package com.hospital.Hospital.Management.dto;
+
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Data;
-import java.time.LocalDateTime;
 
 @Data
 @Builder

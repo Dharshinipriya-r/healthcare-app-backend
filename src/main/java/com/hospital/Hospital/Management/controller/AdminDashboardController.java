@@ -72,7 +72,7 @@ public class AdminDashboardController {
         return ResponseEntity.ok(patients);
     }
 
-    // --- Doctor & Schedule Viewing Endpoints ---
+  
     @GetMapping("/doctors")
     public ResponseEntity<List<User>> getAllDoctors() {
         List<User> doctors = userRepository.findAll().stream()
@@ -86,9 +86,6 @@ public class AdminDashboardController {
         return ResponseEntity.ok(doctorAvailabilityRepository.findByDoctorId(doctorId));
     }
 
-  
-
-    // --- System Monitoring & Management Endpoints ---
     @GetMapping("/logs")
     public ResponseEntity<List<SystemLog>> getSystemLogs() {
         return ResponseEntity.ok(systemLogRepository.findAll(Sort.by(Sort.Direction.DESC, "timestamp")));

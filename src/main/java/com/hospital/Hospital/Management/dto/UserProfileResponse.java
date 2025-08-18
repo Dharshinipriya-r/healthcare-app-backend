@@ -1,13 +1,14 @@
 package com.hospital.Hospital.Management.dto;
 
+import java.util.Set;
+
 import com.hospital.Hospital.Management.model.Role;
 import com.hospital.Hospital.Management.model.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Set;
 
 @Data
 @Builder
@@ -23,11 +24,7 @@ public class UserProfileResponse {
     private Set<Role> roles;
     private boolean enabled;
 
-    /**
-     * Factory method to create a UserProfileResponse from a User entity
-     * @param user The user entity
-     * @return A UserProfileResponse object
-     */
+    
     public static UserProfileResponse fromUser(User user) {
         return UserProfileResponse.builder()
                 .id(user.getId())

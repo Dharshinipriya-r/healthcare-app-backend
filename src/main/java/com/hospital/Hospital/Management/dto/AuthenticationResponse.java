@@ -17,8 +17,8 @@ public class AuthenticationResponse {
     private String tokenType = "Bearer";
     private Long userId;
 
-    // For frontend compatibility (expects `token` and `user.id`)
-    private String token; // alias of accessToken
+   
+    private String token; 
     private UserSummary user; // lightweight user payload for clients
 
     @Data
@@ -28,6 +28,6 @@ public class AuthenticationResponse {
     public static class UserSummary {
         private Long id;
         private String email;
-        private String role; // single primary role for convenience
+        private String role; 
     }
 }

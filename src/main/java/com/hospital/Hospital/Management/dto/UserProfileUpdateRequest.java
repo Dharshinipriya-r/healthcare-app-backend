@@ -21,7 +21,7 @@ public class UserProfileUpdateRequest {
     @Email(message = "Email should be valid")
     private String email;
 
-    // Optional fields for profile update
+   
     @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$", message = "Phone number is not valid")
     private String phoneNumber;
 
@@ -30,6 +30,6 @@ public class UserProfileUpdateRequest {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String newPassword;
 
-    // Current password required for security when updating sensitive information
+    
     private String currentPassword;
 }

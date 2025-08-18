@@ -1,11 +1,11 @@
 package com.hospital.Hospital.Management.dto;
 
+import java.time.LocalTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalTime;
 
 @Data
 @Builder
@@ -14,5 +14,5 @@ import java.time.LocalTime;
 public class TimeSlotDto {
     private LocalTime startTime;
     private LocalTime endTime;
-    private String status; // "AVAILABLE" or "BOOKED"
+    private String status; 
 }

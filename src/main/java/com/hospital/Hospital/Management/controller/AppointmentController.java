@@ -1,17 +1,29 @@
 package com.hospital.Hospital.Management.controller;
 
-import com.hospital.Hospital.Management.dto.*;
-import com.hospital.Hospital.Management.service.AppointmentService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hospital.Hospital.Management.dto.ApiResponse;
+import com.hospital.Hospital.Management.dto.AppointmentRequestDto;
+import com.hospital.Hospital.Management.dto.AppointmentResponseDto;
+import com.hospital.Hospital.Management.dto.BookingResponseDto;
+import com.hospital.Hospital.Management.dto.RescheduleRequestDto;
+import com.hospital.Hospital.Management.service.AppointmentService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -35,7 +47,7 @@ public class AppointmentController {
         return ResponseEntity.ok(new ApiResponse(true, "Appointment cancelled successfully.", null));
     }
 
-    // --- NEW ENDPOINT for patient-side rescheduling ---
+   
     @PutMapping("/{id}/reschedule")
     @PreAuthorize("hasRole('PATIENT')")
     public ResponseEntity<AppointmentResponseDto> rescheduleAppointment(
@@ -59,8 +71,6 @@ public class AppointmentController {
         return ResponseEntity.ok(upcomingAppointments);
     }
 
-    // Note: The /doctors endpoint was removed as it's now part of the /api/doctors/search controller.
-    // The other admin/doctor endpoints remain as they were.
     @GetMapping("/upcoming/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
     public ResponseEntity<List<AppointmentResponseDto>> getAllUpcomingAppointments() {

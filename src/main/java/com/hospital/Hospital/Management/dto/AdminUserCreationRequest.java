@@ -29,13 +29,11 @@ public class AdminUserCreationRequest {
     @NotBlank(message = "Full name is required")
     private String fullName;
 
-    // Optional fields for additional information
+   
     @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$", message = "Phone number is not valid")
     private String phoneNumber;
 
     private String address;
 
-    // Role is not included as it will be determined by the endpoint
-    // /admin/add-doctor will set ROLE_DOCTOR
-    // /admin/add-admin will set ROLE_ADMIN
+    
 }

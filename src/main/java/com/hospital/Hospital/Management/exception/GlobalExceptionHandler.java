@@ -1,8 +1,9 @@
 package com.hospital.Hospital.Management.exception;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import lombok.Getter;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,7 +52,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage()));
     }
 
-    // --- vvvvv THIS IS THE NEW HANDLER FOR YOUR SCENARIO vvvvv ---
+   
     @ExceptionHandler(SlotUnavailableException.class)
     public ResponseEntity<ErrorResponse> handleSlotUnavailable(SlotUnavailableException ex) {
         return ResponseEntity

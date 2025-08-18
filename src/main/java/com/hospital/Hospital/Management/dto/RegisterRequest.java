@@ -8,10 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for public patient registration
- * Role is hardcoded to PATIENT in the service layer
- */
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,5 +26,5 @@ public class RegisterRequest {
     @NotBlank(message = "Full name is required")
     private String fullName;
 
-    // Role field removed as it's hardcoded to PATIENT in the service layer
+    
 }

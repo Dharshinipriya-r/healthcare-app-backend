@@ -1,16 +1,23 @@
 package com.hospital.Hospital.Management.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.hospital.Hospital.Management.dto.AuthenticationRequest;
 import com.hospital.Hospital.Management.dto.AuthenticationResponse;
 import com.hospital.Hospital.Management.dto.RegisterRequest;
 import com.hospital.Hospital.Management.dto.ResetPasswordRequest;
 import com.hospital.Hospital.Management.service.AuthService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,12 +26,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    /**
-     * Public endpoint for patient registration only
-     * Role is hardcoded to PATIENT in the service layer
-     * @param request The registration request containing email, password, and fullName
-     * @return Response with success message
-     */
+    //responsible for registeration of patient
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request);
@@ -36,7 +38,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
-    // Alias endpoint for frontend compatibility
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
@@ -61,15 +63,4 @@ public class AuthController {
     }
 
 
-//    @PostMapping("/forgot-password")
-//    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-//        authService.requestPasswordReset(email);
-//        return ResponseEntity.ok("If an account with that email exists, a password reset link has been sent.");
-//    }
-//
-//    @PostMapping("/reset-password")
-//    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-//        authService.resetPassword(request);
-//        return ResponseEntity.ok("Password has been reset successfully. You can now log in with your new password.");
-//    }
 }

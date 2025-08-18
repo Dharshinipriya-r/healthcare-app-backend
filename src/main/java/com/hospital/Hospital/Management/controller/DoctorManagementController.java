@@ -1,14 +1,10 @@
 package com.hospital.Hospital.Management.controller;
 
-import com.hospital.Hospital.Management.dto.*;
-import com.hospital.Hospital.Management.service.DoctorManagementService;
-import com.hospital.Hospital.Management.model.AppointmentStatus;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-// --- vvvvv THESE ARE THE MISSING IMPORTS vvvvv ---
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +13,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-// --- ^^^^^ THESE ARE THE MISSING IMPORTS ^^^^^ ---
 
+import com.hospital.Hospital.Management.dto.AddNoteResponseDto;
+import com.hospital.Hospital.Management.dto.AppointmentActionResponseDto;
+import com.hospital.Hospital.Management.dto.AppointmentHistoryDto;
+import com.hospital.Hospital.Management.dto.AppointmentResponseDto;
+import com.hospital.Hospital.Management.dto.ConsultationNoteDto;
+import com.hospital.Hospital.Management.dto.DoctorProfileDto;
+import com.hospital.Hospital.Management.dto.RescheduleRequestDto;
+import com.hospital.Hospital.Management.dto.SetAvailabilityResponseDto;
+import com.hospital.Hospital.Management.dto.WeeklyAvailabilityRequestDto;
+import com.hospital.Hospital.Management.model.AppointmentStatus;
+import com.hospital.Hospital.Management.service.DoctorManagementService;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
-@RestController // <-- This line will now compile correctly
+@RestController 
 @RequestMapping("/api/doctors")
 @PreAuthorize("hasRole('DOCTOR')")
 public class DoctorManagementController {
@@ -47,7 +53,7 @@ public class DoctorManagementController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // --- THIS IS THE NEW RESCHEDULE ENDPOINT ---
+   
     @PutMapping("/{id}/appointments/{appointmentId}/reschedule")
     @PreAuthorize("#id == @userRepository.findByEmail(principal.username).get().id")
     public ResponseEntity<AppointmentResponseDto> rescheduleAppointment(
