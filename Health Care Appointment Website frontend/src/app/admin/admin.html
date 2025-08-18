@@ -1,0 +1,141 @@
+<div class="admin-container">
+  <h2 style="text-align:center; margin-bottom:2rem; color:#007bff;">
+    <i class="fas fa-user-shield"></i> Admin Dashboard
+  </h2>
+
+  <!-- Tab Navigation -->
+  <div class="tab-nav">
+    <button [class.active]="activeTab === 'dashboard'" (click)="setTab('dashboard')">
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    </button>
+   
+  </div>
+
+  <!-- Dashboard Tab -->
+  <div *ngIf="activeTab === 'dashboard'">
+    <!-- User Management Section -->
+    <div class="admin-section">
+      <h3><i class="fas fa-users-cog"></i> User Management</h3>
+      <!-- Block/Unblock by User ID -->
+      <div class="block-unblock-user-id" style="margin-bottom: 1rem;">
+        <label for="blockUnblockUserId">Block/Unblock User by ID:</label>
+        <input type="number" id="blockUnblockUserId" [(ngModel)]="blockUnblockUserId" placeholder="Enter User ID" style="width: 120px; margin-right: 8px;" />
+        <button (click)="blockUserById()" style="margin-right: 4px;">
+          <i class="fas fa-user-lock"></i> Block
+        </button>
+        <button (click)="unblockUserById()">
+          <i class="fas fa-unlock"></i> Unblock
+        </button>
+      </div>
+
+    </div>
+
+    
+
+    <!-- System Analytics Section -->
+    <div class="admin-section">
+      <h3><i class="fas fa-chart-bar"></i> System Analytics</h3>
+      <div *ngIf="analytics">
+        <p><i class="fas fa-users"></i> Total Users: <b>{{ analytics.totalUsers }}</b></p>
+        <p><i class="fas fa-user-md"></i> Total Doctors: <b>{{ analytics.totalDoctors }}</b></p>
+        <p><i class="fas fa-user-injured"></i> Total Patients: <b>{{ analytics.totalPatients }}</b></p>
+        <p><i class="fas fa-calendar-alt"></i> Total Appointments: <b>{{ analytics.totalAppointments }}</b></p>
+        <p><i class="fas fa-calendar-check"></i> Scheduled Appointments: <b>{{ analytics.scheduledAppointments }}</b></p>
+        <p><i class="fas fa-calendar-plus"></i> Completed Appointments: <b>{{ analytics.completedAppointments }}</b></p>
+        <p><i class="fas fa-calendar-times"></i> Canceled Appointments: <b>{{ analytics.canceledAppointments }}</b></p>
+      </div>
+    </div>
+
+    
+
+    <!-- Create New User Section -->
+    <div class="admin-section">
+      <h3><i class="fas fa-user-plus"></i> Create New User</h3>
+      <form (ngSubmit)="createUser()" #createUserForm="ngForm">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            [(ngModel)]="newUser.firstName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            [(ngModel)]="newUser.lastName"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="newUser.email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="newUser.password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="role">Role</label>
+          <select id="role" name="role" [(ngModel)]="newUser.role" required>
+            <option value="ROLE_DOCTOR">Doctor</option>
+            <!-- <option value="ROLE_PATIENT">Patient</option> -->
+            <option value="ROLE_ADMIN">Admin</option>
+          </select>
+        </div>
+        <button type="submit">
+          <i class="fas fa-plus-circle"></i> Create User
+        </button>
+      </form>
+    </div>
+
+    <!-- Send Announcement Section (now only in dashboard tab) -->
+    <div class="admin-section">
+      <h3><i class="fas fa-bullhorn"></i> Send System-wide Announcement</h3>
+      <form (ngSubmit)="sendAnnouncement()" #announcementForm="ngForm">
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            [(ngModel)]="announcement.subject"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            [(ngModel)]="announcement.message"
+            required
+          ></textarea>
+        </div>
+        <button type="submit">
+          <i class="fas fa-paper-plane"></i> Send Announcement
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  
+</div>
