@@ -1,23 +1,26 @@
 package com.hospital.Hospital.Management.service;
 
-import com.hospital.Hospital.Management.dto.AnnouncementRequestDto;
-import com.hospital.Hospital.Management.dto.DashboardAnalyticsDto;
-import com.hospital.Hospital.Management.dto.RegisterRequest;
-import com.hospital.Hospital.Management.exception.UserAlreadyExistsException;
-import com.hospital.Hospital.Management.model.*;
-import com.hospital.Hospital.Management.repository.AppointmentRepository;
-import com.hospital.Hospital.Management.repository.FeedbackRepository;
-import com.hospital.Hospital.Management.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
+import com.hospital.Hospital.Management.dto.AnnouncementRequestDto;
+import com.hospital.Hospital.Management.dto.DashboardAnalyticsDto;
+import com.hospital.Hospital.Management.dto.RegisterRequest;
+import com.hospital.Hospital.Management.exception.UserAlreadyExistsException;
+import com.hospital.Hospital.Management.model.Appointment;
+import com.hospital.Hospital.Management.model.AppointmentStatus;
+import com.hospital.Hospital.Management.model.Role;
+import com.hospital.Hospital.Management.model.User;
+import com.hospital.Hospital.Management.repository.AppointmentRepository;
+import com.hospital.Hospital.Management.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,6 @@ public class AdminDashboardService {
     private final AppointmentRepository appointmentRepository;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
-    private final FeedbackRepository feedbackRepository;
 
     @Transactional
     public User blockUser(Long userId, UserDetails adminDetails) {
@@ -124,31 +126,8 @@ public class AdminDashboardService {
         log.info("Finished processing announcement request for {} users.", usersToSend.size());
     }
 
-    public List<Feedback> getFeedbackForDoctor(Long doctorId) {
-        log.info("Fetching all feedback for doctor ID: {}", doctorId);
-        User doctor = userRepository.findById(doctorId)
-                .orElseThrow(() -> new EntityNotFoundException("Doctor not found with ID: " + doctorId));
-        return feedbackRepository.findByDoctorOrderByCreatedAtDesc(doctor);
-    }
 
-    public List<Feedback> getUnreviewedFeedback() {
-        log.info("Fetching all unreviewed feedback for administrative review.");
-        return feedbackRepository.findByIsReviewedOrderByCreatedAtAsc(false);
-    }
-
-    @Transactional
-    public Feedback reviewFeedback(Long feedbackId, String adminNotes, UserDetails adminDetails) {
-        log.info("Admin '{}' is reviewing feedback ID: {}", adminDetails.getUsername(), feedbackId);
-        Feedback feedback = feedbackRepository.findById(feedbackId)
-                .orElseThrow(() -> new EntityNotFoundException("Feedback not found with ID: " + feedbackId));
-        feedback.setIsReviewed(true);
-        feedback.setAdminNotes(adminNotes);
-        Feedback savedFeedback = feedbackRepository.save(feedback);
-        User adminUser = userRepository.findByEmail(adminDetails.getUsername()).orElse(null);
-        String logDetails = String.format("Feedback ID %d was marked as reviewed.", feedbackId);
-        logService.logActivity(adminUser, "FEEDBACK_REVIEWED", logDetails);
-        return savedFeedback;
-    }
+  
 
     private Role mapRole(String role) {
         return switch (role.toUpperCase()) {

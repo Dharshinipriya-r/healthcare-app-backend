@@ -1,1 +1,0 @@
-export { BookAppointmentComponent } from './book-appointment';

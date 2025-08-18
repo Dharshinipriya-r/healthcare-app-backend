@@ -1,22 +1,33 @@
 package com.hospital.Hospital.Management.controller;
 
-import com.hospital.Hospital.Management.dto.*;
-import com.hospital.Hospital.Management.model.*;
-import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
-import com.hospital.Hospital.Management.repository.FeedbackRepository;
-import com.hospital.Hospital.Management.repository.SystemLogRepository;
-import com.hospital.Hospital.Management.repository.UserRepository;
-import com.hospital.Hospital.Management.service.AdminDashboardService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.hospital.Hospital.Management.dto.AnnouncementRequestDto;
+import com.hospital.Hospital.Management.dto.DashboardAnalyticsDto;
+import com.hospital.Hospital.Management.dto.RegisterRequest;
+import com.hospital.Hospital.Management.model.DoctorAvailability;
+import com.hospital.Hospital.Management.model.Role;
+import com.hospital.Hospital.Management.model.SystemLog;
+import com.hospital.Hospital.Management.model.User;
+import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
+import com.hospital.Hospital.Management.repository.SystemLogRepository;
+import com.hospital.Hospital.Management.repository.UserRepository;
+import com.hospital.Hospital.Management.service.AdminDashboardService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -26,10 +37,10 @@ public class AdminDashboardController {
     private final UserRepository userRepository;
     private final DoctorAvailabilityRepository doctorAvailabilityRepository;
     private final SystemLogRepository systemLogRepository;
-    private final FeedbackRepository feedbackRepository;
+    
     private final AdminDashboardService adminDashboardService;
 
-    // --- User Management Endpoints ---
+   
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userRepository.findAll());
@@ -75,28 +86,7 @@ public class AdminDashboardController {
         return ResponseEntity.ok(doctorAvailabilityRepository.findByDoctorId(doctorId));
     }
 
-    // --- Feedback and Ratings Endpoints ---
-    @GetMapping("/doctors/{doctorId}/feedback")
-    public ResponseEntity<List<Feedback>> getDoctorFeedback(@PathVariable Long doctorId) {
-        List<Feedback> feedback = adminDashboardService.getFeedbackForDoctor(doctorId);
-        return ResponseEntity.ok(feedback);
-    }
-
-    @GetMapping("/feedback/unreviewed")
-    public ResponseEntity<List<Feedback>> getUnreviewedFeedback() {
-        List<Feedback> feedback = adminDashboardService.getUnreviewedFeedback();
-        return ResponseEntity.ok(feedback);
-    }
-
-    @PostMapping("/feedback/{feedbackId}/review")
-    public ResponseEntity<Feedback> reviewFeedback(
-            @PathVariable Long feedbackId,
-            @RequestBody AdminNotesDto notes,
-            @AuthenticationPrincipal UserDetails adminDetails
-    ) {
-        Feedback reviewedFeedback = adminDashboardService.reviewFeedback(feedbackId, notes.getAdminNotes(), adminDetails);
-        return ResponseEntity.ok(reviewedFeedback);
-    }
+  
 
     // --- System Monitoring & Management Endpoints ---
     @GetMapping("/logs")
