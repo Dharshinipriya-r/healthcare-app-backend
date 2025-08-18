@@ -12,7 +12,7 @@
 	<artifactId>Hospital-Management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Hospital-Management</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Health-care-Appointment-web</description>
 	<url/>
 	<licenses>
 		<license/>
