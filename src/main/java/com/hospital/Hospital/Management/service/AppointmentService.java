@@ -1,18 +1,5 @@
 package com.hospital.Hospital.Management.service;
 
-import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
-import com.hospital.Hospital.Management.dto.*;
-import com.hospital.Hospital.Management.exception.ResourceNotFoundException;
-import com.hospital.Hospital.Management.exception.SlotUnavailableException;
-import com.hospital.Hospital.Management.model.*;
-import com.hospital.Hospital.Management.repository.AppointmentRepository;
-import com.hospital.Hospital.Management.repository.UserRepository;
-import com.hospital.Hospital.Management.repository.WaitlistRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +8,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hospital.Hospital.Management.dto.AppointmentRequestDto;
+import com.hospital.Hospital.Management.dto.AppointmentResponseDto;
+import com.hospital.Hospital.Management.dto.BookingResponseDto;
+import com.hospital.Hospital.Management.exception.ResourceNotFoundException;
+import com.hospital.Hospital.Management.exception.SlotUnavailableException;
+import com.hospital.Hospital.Management.model.Appointment;
+import com.hospital.Hospital.Management.model.AppointmentStatus;
+import com.hospital.Hospital.Management.model.DayOfWeek;
+import com.hospital.Hospital.Management.model.User;
+import com.hospital.Hospital.Management.model.WaitlistEntry;
+import com.hospital.Hospital.Management.repository.AppointmentRepository;
+import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
+import com.hospital.Hospital.Management.repository.UserRepository;
+import com.hospital.Hospital.Management.repository.WaitlistRepository;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
 public class AppointmentService {
@@ -28,18 +36,18 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
     private final DoctorAvailabilityRepository availabilityRepository;
-    private final WaitlistRepository waitlistRepository; // <-- ADDED
+    private final WaitlistRepository waitlistRepository; 
     private final EmailService emailService;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               UserRepository userRepository,
                               DoctorAvailabilityRepository availabilityRepository,
-                              WaitlistRepository waitlistRepository, // <-- ADDED
+                              WaitlistRepository waitlistRepository, 
                               EmailService emailService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.availabilityRepository = availabilityRepository;
-        this.waitlistRepository = waitlistRepository; // <-- ADDED
+        this.waitlistRepository = waitlistRepository; 
         this.emailService = emailService;
     }
 
@@ -134,11 +142,11 @@ public class AppointmentService {
             log.error("Failed to send patient cancellation notification for appointment {}. Error: {}", appointmentId, e.getMessage());
         }
 
-        // --- NEW: Process waitlist after cancellation ---
+        
         processWaitlistForCancellation(appointment);
     }
 
-    // --- NEW METHOD for patient-side rescheduling ---
+   
     @Transactional
     public AppointmentResponseDto rescheduleAppointment(Long appointmentId, String patientEmail, LocalDateTime newDateTime) throws AccessDeniedException {
         log.info("Patient [{}] attempting to reschedule appointment [{}] to {}", patientEmail, appointmentId, newDateTime);
@@ -176,7 +184,6 @@ public class AppointmentService {
         return mapToResponseDto(savedAppointment);
     }
 
-    // --- NEW METHOD to process waitlist ---
     private void processWaitlistForCancellation(Appointment cancelledAppointment) {
         User doctor = cancelledAppointment.getDoctor();
         LocalDate date = cancelledAppointment.getAppointmentDateTime().toLocalDate();
@@ -195,7 +202,7 @@ public class AppointmentService {
                     .patient(patientToBook)
                     .doctor(doctor)
                     .appointmentDateTime(freedSlot)
-                    .status(AppointmentStatus.SCHEDULED) // Starts as scheduled, doctor needs to confirm
+                    .status(AppointmentStatus.SCHEDULED) 
                     .build();
             appointmentRepository.save(newAppointment);
 
@@ -212,8 +219,7 @@ public class AppointmentService {
         }
     }
 
-    // ... other existing methods ...
-    // The rest of this service file remains the same.
+    
     public List<AppointmentResponseDto> getAppointmentsForPatient(String patientEmail) {
         log.info("Fetching all appointments for patient: {}", patientEmail);
         User patient = userRepository.findByEmail(patientEmail).orElseThrow(() -> new UsernameNotFoundException("Patient not found"));

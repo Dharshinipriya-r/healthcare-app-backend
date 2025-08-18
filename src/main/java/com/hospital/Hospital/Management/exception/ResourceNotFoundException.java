@@ -1,4 +1,4 @@
-// src/main/java/com/hospital/Hospital/Management/exception/ResourceNotFoundException.java
+
 package com.hospital.Hospital.Management.exception;
 
 import org.springframework.http.HttpStatus;

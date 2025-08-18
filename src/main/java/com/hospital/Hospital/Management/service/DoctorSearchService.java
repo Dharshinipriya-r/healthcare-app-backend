@@ -1,21 +1,5 @@
 package com.hospital.Hospital.Management.service;
 
-import com.hospital.Hospital.Management.dto.DoctorSearchResultDto;
-import com.hospital.Hospital.Management.dto.TimeSlotDto;
-import com.hospital.Hospital.Management.model.Appointment;
-import com.hospital.Hospital.Management.model.DoctorAvailability;
-import com.hospital.Hospital.Management.model.Role;
-import com.hospital.Hospital.Management.model.User;
-import com.hospital.Hospital.Management.model.AppointmentStatus;
-import com.hospital.Hospital.Management.repository.AppointmentRepository;
-import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
-import com.hospital.Hospital.Management.repository.UserRepository;
-import jakarta.persistence.criteria.Predicate;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,6 +7,24 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.hospital.Hospital.Management.dto.DoctorSearchResultDto;
+import com.hospital.Hospital.Management.dto.TimeSlotDto;
+import com.hospital.Hospital.Management.model.Appointment;
+import com.hospital.Hospital.Management.model.AppointmentStatus;
+import com.hospital.Hospital.Management.model.DoctorAvailability;
+import com.hospital.Hospital.Management.model.Role;
+import com.hospital.Hospital.Management.model.User;
+import com.hospital.Hospital.Management.repository.AppointmentRepository;
+import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
+import com.hospital.Hospital.Management.repository.UserRepository;
+
+import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +89,7 @@ public class DoctorSearchService {
                 ));
 
         LocalDate today = LocalDate.now();
-        for (int i = 0; i < 7; i++) { // Generate for the next 7 days
+        for (int i = 0; i < 7; i++) { 
             LocalDate currentDate = today.plusDays(i);
             List<TimeSlotDto> dailySlots = generateDailySlots(currentDate, rules, doctor.getSlotDurationInMinutes(), bookedSlotsMap.getOrDefault(currentDate, List.of()));
             if (!dailySlots.isEmpty()) {
@@ -123,7 +125,7 @@ public class DoctorSearchService {
                                 .build();
 
                         slots.add(slotDto);
-                        currentTime = slotEnd.plusMinutes(1); // **Added 1-minute gap logic**
+                        currentTime = slotEnd.plusMinutes(1); 
                     }
                 });
 

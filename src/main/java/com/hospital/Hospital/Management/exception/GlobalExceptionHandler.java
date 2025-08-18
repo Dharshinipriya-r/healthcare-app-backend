@@ -56,10 +56,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SlotUnavailableException.class)
     public ResponseEntity<ErrorResponse> handleSlotUnavailable(SlotUnavailableException ex) {
         return ResponseEntity
-                .status(HttpStatus.CONFLICT) // 409 Conflict is appropriate here
+                .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(ex.getMessage()));
     }
-    // --- ^^^^^ THIS IS THE NEW HANDLER FOR YOUR SCENARIO ^^^^^ ---
+   
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {

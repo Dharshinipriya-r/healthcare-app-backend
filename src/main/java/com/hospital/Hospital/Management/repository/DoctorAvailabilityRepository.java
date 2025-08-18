@@ -1,10 +1,11 @@
-// src/main/java/com/hospital/Hospital/Management/doctor_management_module_3/repository/DoctorAvailabilityRepository.java
 package com.hospital.Hospital.Management.repository;
 
-import com.hospital.Hospital.Management.model.DoctorAvailability;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+
+import com.hospital.Hospital.Management.model.DoctorAvailability;
 
 @Repository
 public interface DoctorAvailabilityRepository extends JpaRepository<DoctorAvailability, Long> {

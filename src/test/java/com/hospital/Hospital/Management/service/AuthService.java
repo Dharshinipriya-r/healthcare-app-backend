@@ -1,20 +1,5 @@
 package com.hospital.Hospital.Management.service;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hospital.Hospital.Management.dto.AuthenticationRequest;
 import com.hospital.Hospital.Management.dto.AuthenticationResponse;
 import com.hospital.Hospital.Management.dto.RegisterRequest;
@@ -27,9 +12,25 @@ import com.hospital.Hospital.Management.model.User;
 import com.hospital.Hospital.Management.model.VerificationToken;
 import com.hospital.Hospital.Management.repository.UserRepository;
 import com.hospital.Hospital.Management.repository.VerificationTokenRepository;
-
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+
+//Logger
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,34 +48,35 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequest request) {
         logger.info("Attempting to register user with email: {}", request.getEmail());
-       
+        // Check if user already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             logger.warn("Registration failed: user with email {} already exists", request.getEmail());
             throw new UserAlreadyExistsException("User with email " + request.getEmail() + " already exists");
         }
 
-       
+        // Create user entity with PATIENT role only (public registration is restricted to patients)
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fullName(request.getFullName())
-                .roles(Collections.singleton(Role.ROLE_PATIENT)) 
+                .roles(Collections.singleton(Role.ROLE_PATIENT)) // Hardcoded to PATIENT role
                 .enabled(false)
                 .build();
 
         User savedUser = userRepository.save(user);
         logger.info("User registered successfully: {}", savedUser.getEmail());
 
+        // Create verification token
         VerificationToken verificationToken = VerificationToken.generateToken(savedUser, TokenType.EMAIL_VERIFICATION);
         tokenRepository.save(verificationToken);
         logger.info("Verification token generated for user: {}", savedUser.getEmail());
 
-      
+        // Send verification email
         try {
             emailService.sendVerificationEmail(savedUser.getEmail(), verificationToken.getToken());
             logger.info("Verification email sent to: {}", savedUser.getEmail());
         } catch (MessagingException e) {
-           
+            // Log error and continue. User can request a new verification token.
             System.err.println("Failed to send verification email: " + e.getMessage());
         }
     }
@@ -93,7 +95,7 @@ public class AuthService {
     String jwt = jwtService.generateToken(userDetails);
     String refreshToken = jwtService.generateRefreshToken(userDetails);
 
-   
+    // Fetch user to extract id and role
     User user = userRepository.findByEmail(userDetails.getUsername())
         .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userDetails.getUsername()));
 
@@ -102,7 +104,7 @@ public class AuthService {
     return AuthenticationResponse.builder()
         .accessToken(jwt)
         .refreshToken(refreshToken)
-        .token(jwt) 
+        .token(jwt) // alias for frontend expecting `token`
         .userId(user.getId())
         .user(AuthenticationResponse.UserSummary.builder()
             .id(user.getId())
@@ -141,7 +143,7 @@ public class AuthService {
         tokenRepository.save(verificationToken);
 
         logger.info("Email verified successfully for user: {}", user.getEmail());
-
+//for json message
         return ResponseEntity.ok(Map.of("message", "Email successfully verified. You can now log in."));
     }
 
@@ -151,6 +153,7 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
 
+        // Check for existing token and invalidate if exists
         Optional<VerificationToken> existingToken = tokenRepository.findByUserAndTokenType(user, TokenType.PASSWORD_RESET);
         existingToken.ifPresent(token -> {
             token.setUsed(true);
@@ -158,19 +161,19 @@ public class AuthService {
             logger.info("Existing password reset token invalidated for user: {}", user.getEmail());
         });
 
-      
+        // Create new password reset token
         VerificationToken resetToken = VerificationToken.generateToken(user, TokenType.PASSWORD_RESET);
         tokenRepository.save(resetToken);
         logger.info("New password reset token generated for user: {}", user.getEmail());
 
-        
+        // Send password reset email
         try {
             emailService.sendPasswordResetEmail(user.getEmail(), resetToken.getToken());
             logger.info("Password reset email sent to: {}", user.getEmail());
         } catch (MessagingException e) {
             System.err.println("Failed to send password reset email: " + e.getMessage());
         }
-
+//for json message instead of void i used Response entity and returned it
         return ResponseEntity.ok(Map.of("message", "Password reset link has been sent to your email"));
     }
 
@@ -205,5 +208,5 @@ public class AuthService {
         logger.info("Password reset successful for user: {}", user.getEmail());
     }
 
-    
+    // Note: role mapping is handled elsewhere; keep service lean
 }

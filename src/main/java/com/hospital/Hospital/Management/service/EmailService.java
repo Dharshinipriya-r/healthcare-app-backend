@@ -1,19 +1,21 @@
 package com.hospital.Hospital.Management.service;
 
-import com.hospital.Hospital.Management.model.Appointment;
-import com.hospital.Hospital.Management.model.User;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.hospital.Hospital.Management.model.Appointment;
+import com.hospital.Hospital.Management.model.User;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class EmailService {
     @Value("${app.base-url}")
     private String baseUrl;
 
-    // ... existing methods like sendVerificationEmail, sendPasswordResetEmail ...
+    
 
     @Async
     public void sendAppointmentConfirmationEmail(Appointment appointment) throws MessagingException {
@@ -53,7 +55,7 @@ public class EmailService {
         sendHtmlEmail(appointment.getPatient().getEmail(), subject, body, "#4CAF50");
     }
 
-    // --- NEW: Email for when a patient reschedules ---
+    
     @Async
     public void sendAppointmentRescheduleByPatientEmail(Appointment appointment, LocalDateTime oldDateTime) throws MessagingException {
         String subject = "Patient Reschedule Notice - Appointment Update";
@@ -75,7 +77,7 @@ public class EmailService {
         sendHtmlEmail(appointment.getDoctor().getEmail(), subject, body, "#FF9800");
     }
 
-    // --- NEW: Email for when a waitlisted patient gets a slot ---
+    
     @Async
     public void sendWaitlistBookingConfirmationEmail(Appointment appointment) throws MessagingException {
         String subject = "Your Waitlisted Appointment is Now Booked!";
@@ -99,9 +101,7 @@ public class EmailService {
         sendHtmlEmail(appointment.getPatient().getEmail(), subject, body, "#4CAF50");
     }
 
-    // The rest of the EmailService methods remain as they were in your provided file.
-    // I am including them here for completeness.
-
+   
     @Async
     public void sendVerificationEmail(String to, String token) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();

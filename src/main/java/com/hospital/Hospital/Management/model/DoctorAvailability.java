@@ -1,9 +1,23 @@
-// src/main/java/com/hospital/Hospital/Management/doctor_management_module_3/model/DoctorAvailability.java
 package com.hospital.Hospital.Management.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "doctor_availability")
@@ -31,4 +45,8 @@ public class DoctorAvailability {
 
     @Column(nullable = false)
     private LocalTime endTime;
+
+    public DoctorAvailability(User doctor, DayOfWeek dayOfWeek, LocalTime minusHours, LocalTime plusHours) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

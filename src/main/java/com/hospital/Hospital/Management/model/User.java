@@ -1,17 +1,33 @@
-// File: src/main/java/com/hospital/Hospital/Management/model/User.java
-// State: AFTER adding Doctor Management features
 
 package com.hospital.Hospital.Management.model;
-
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -63,7 +79,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // --- Doctor-specific fields ---
+   
 
     @Column(length = 100)
     private String specialization;
@@ -73,7 +89,6 @@ public class User {
 
     private Double rating;
 
-    // --- ADDED THIS FIELD for slot duration ---
     private Integer slotDurationInMinutes;
 
     @OneToMany(

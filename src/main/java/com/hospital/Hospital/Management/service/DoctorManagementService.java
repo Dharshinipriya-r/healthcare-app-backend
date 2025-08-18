@@ -1,25 +1,38 @@
 package com.hospital.Hospital.Management.service;
 
-import com.hospital.Hospital.Management.dto.*;
-import com.hospital.Hospital.Management.model.ConsultationNote;
-import com.hospital.Hospital.Management.model.DoctorAvailability;
-import com.hospital.Hospital.Management.repository.ConsultationNoteRepository;
-import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
-import com.hospital.Hospital.Management.dto.ApiResponse;
-import com.hospital.Hospital.Management.exception.ResourceNotFoundException;
-import com.hospital.Hospital.Management.exception.SlotUnavailableException;
-import com.hospital.Hospital.Management.model.*;
-import com.hospital.Hospital.Management.repository.AppointmentRepository;
-import com.hospital.Hospital.Management.repository.UserRepository;
-import com.hospital.Hospital.Management.repository.WaitlistRepository; // Import WaitlistRepository
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.hospital.Hospital.Management.dto.AddNoteResponseDto;
+import com.hospital.Hospital.Management.dto.ApiResponse;
+import com.hospital.Hospital.Management.dto.AppointmentActionResponseDto;
+import com.hospital.Hospital.Management.dto.AppointmentHistoryDto;
+import com.hospital.Hospital.Management.dto.AppointmentResponseDto;
+import com.hospital.Hospital.Management.dto.ConsultationNoteDto;
+import com.hospital.Hospital.Management.dto.DoctorProfileDto;
+import com.hospital.Hospital.Management.dto.SetAvailabilityResponseDto;
+import com.hospital.Hospital.Management.dto.UpcomingAppointmentDto;
+import com.hospital.Hospital.Management.dto.WeeklyAvailabilityRequestDto;
+import com.hospital.Hospital.Management.exception.ResourceNotFoundException;
+import com.hospital.Hospital.Management.exception.SlotUnavailableException;
+import com.hospital.Hospital.Management.model.Appointment;
+import com.hospital.Hospital.Management.model.AppointmentStatus;
+import com.hospital.Hospital.Management.model.ConsultationNote;
+import com.hospital.Hospital.Management.model.DayOfWeek;
+import com.hospital.Hospital.Management.model.DoctorAvailability;
+import com.hospital.Hospital.Management.model.Role;
+import com.hospital.Hospital.Management.model.User;
+import com.hospital.Hospital.Management.repository.AppointmentRepository;
+import com.hospital.Hospital.Management.repository.ConsultationNoteRepository;
+import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
+import com.hospital.Hospital.Management.repository.UserRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -55,7 +68,6 @@ public class DoctorManagementService {
         log.info("Setting weekly availability for doctor ID: {}", doctorId);
         User doctor = findDoctorById(doctorId);
 
-        // Save slot duration
         doctor.setSlotDurationInMinutes(request.getSlotDurationInMinutes());
         userRepository.save(doctor);
 
@@ -99,9 +111,7 @@ public class DoctorManagementService {
                 .build();
     }
 
-    // ... other existing methods ...
-    // The rest of this service file remains the same. The code below is already present in your file.
-
+   
     @Transactional(readOnly = true)
     public ResponseEntity<?> getUpcomingAppointmentsForDoctor(Long doctorId) {
         log.info("Fetching upcoming appointments for doctor ID: {}", doctorId);
