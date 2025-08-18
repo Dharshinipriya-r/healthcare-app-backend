@@ -15,4 +15,5 @@ public class AppointmentResponseDto {
     private LocalDateTime appointmentDateTime;
     private String status;
     private LocalDateTime createdAt;
+    private ConsultationNoteDto consultationNote;
 }

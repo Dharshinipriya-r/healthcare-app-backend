@@ -20,4 +20,5 @@ public class AppointmentActionResponseDto {
     private String newStatus;
     private String message;
     private LocalDateTime timestamp;
+    
 }

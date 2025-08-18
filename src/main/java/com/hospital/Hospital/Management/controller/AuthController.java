@@ -36,6 +36,12 @@ public class AuthController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
+    // Alias endpoint for frontend compatibility
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody AuthenticationRequest request) {
+        return ResponseEntity.ok(authService.authenticate(request));
+    }
+
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmail(@RequestParam String token) {
         authService.verifyEmail(token);

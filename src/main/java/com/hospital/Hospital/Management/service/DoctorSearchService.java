@@ -6,7 +6,7 @@ import com.hospital.Hospital.Management.model.Appointment;
 import com.hospital.Hospital.Management.model.DoctorAvailability;
 import com.hospital.Hospital.Management.model.Role;
 import com.hospital.Hospital.Management.model.User;
-import com.hospital.Hospital.Management.model.AppointmentStatus; // <-- THIS IS THE MISSING IMPORT
+import com.hospital.Hospital.Management.model.AppointmentStatus;
 import com.hospital.Hospital.Management.repository.AppointmentRepository;
 import com.hospital.Hospital.Management.repository.DoctorAvailabilityRepository;
 import com.hospital.Hospital.Management.repository.UserRepository;
@@ -112,7 +112,7 @@ public class DoctorSearchService {
 
                         // Don't show slots that start in the past for today's date
                         if (date.isEqual(LocalDate.now()) && currentTime.isBefore(LocalTime.now())) {
-                            currentTime = slotEnd; // Move to the next slot
+                            currentTime = slotEnd.plusMinutes(1); // Move to the next slot with 1-min gap
                             continue;
                         }
 
@@ -123,7 +123,7 @@ public class DoctorSearchService {
                                 .build();
 
                         slots.add(slotDto);
-                        currentTime = slotEnd;
+                        currentTime = slotEnd.plusMinutes(1); // **Added 1-minute gap logic**
                     }
                 });
 

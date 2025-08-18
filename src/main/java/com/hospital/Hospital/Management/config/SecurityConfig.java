@@ -1,7 +1,8 @@
 package com.hospital.Hospital.Management.config;
 
-import com.hospital.Hospital.Management.security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +21,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
+import com.hospital.Hospital.Management.security.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -44,7 +46,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/api/patient/**").hasRole("PATIENT")
                         .requestMatchers("/api/users/profile").authenticated()
-                        // ADDED RULE FOR MODULE 2
                         .requestMatchers("/api/appointments/**").hasAnyRole("PATIENT", "DOCTOR")
                         .anyRequest().authenticated()
                 )
@@ -65,16 +66,16 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+//handle authentication logic
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
+//CORS policy to allow frontend apps to call your API.
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();//Configures CORS to allow API access from frontend domains.
-        configuration.setAllowedOrigins(List.of("*")); // In production, restrict to specific domains
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));

@@ -28,7 +28,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -92,16 +91,27 @@ public class AuthService {
                 )
         );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtService.generateToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    String jwt = jwtService.generateToken(userDetails);
+    String refreshToken = jwtService.generateRefreshToken(userDetails);
+
+    // Fetch user to extract id and role
+    User user = userRepository.findByEmail(userDetails.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userDetails.getUsername()));
 
         logger.info("Authentication successful for user: {}", userDetails.getUsername());
 
-        return AuthenticationResponse.builder()
-                .accessToken(jwt)
-                .refreshToken(refreshToken)
-                .build();
+    return AuthenticationResponse.builder()
+        .accessToken(jwt)
+        .refreshToken(refreshToken)
+        .token(jwt) // alias for frontend expecting `token`
+        .userId(user.getId())
+        .user(AuthenticationResponse.UserSummary.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .role(user.getRoles().stream().findFirst().map(Enum::name).orElse(null))
+            .build())
+        .build();
     }
 
     @Transactional
@@ -198,12 +208,5 @@ public class AuthService {
         logger.info("Password reset successful for user: {}", user.getEmail());
     }
 
-    private Role mapRole(String role) {
-        return switch (role.toUpperCase()) {
-            case "ADMIN" -> Role.ROLE_ADMIN;
-            case "DOCTOR" -> Role.ROLE_DOCTOR;
-            case "PATIENT" -> Role.ROLE_PATIENT;
-            default -> throw new IllegalArgumentException("Invalid role: " + role);
-        };
-    }
+    // Note: role mapping is handled elsewhere; keep service lean
 }
