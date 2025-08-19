@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO for admin to create doctor or admin users
- */
+
 @Data
 @Builder
 @AllArgsConstructor

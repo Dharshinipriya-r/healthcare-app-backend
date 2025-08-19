@@ -1,4 +1,3 @@
-// src/main/java/com/hospital/Hospital/Management/doctor_management_module_3/dto/ConsultationNoteDto.java
 package com.hospital.Hospital.Management.dto;
 
 import jakarta.validation.constraints.NotBlank;

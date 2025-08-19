@@ -37,7 +37,7 @@ public class ConsultationNote {
     @JoinColumn(name = "appointment_id", nullable = false, unique = true)
     private Appointment appointment;
 
-    @Lob // Use @Lob for potentially long text
+    @Lob 
     @Column(nullable = false)
     private String diagnosis;
 
