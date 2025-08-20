@@ -22,7 +22,7 @@ public class SchedulingConfig {
         
         
         scheduler.setWaitForTasksToCompleteOnShutdown(true); 
-        scheduler.setAwaitTerminationSeconds(30); 
+        scheduler.setAwaitTerminationSeconds(30); //seconds
         
        
         scheduler.setRejectedExecutionHandler(
